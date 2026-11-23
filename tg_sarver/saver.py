@@ -3,8 +3,8 @@ import os
 import asyncio
 
 # ВСТАВЬ СВОИ ДАННЫЕ (api_id и api_hash)
-api_id = 2040
-api_hash = 'b18441a1ff607e10a989891a5462e627'
+api_id = 8
+api_hash = '7245de8e747a0d6fbe11f7cc14fcc0bb'
 
 save_dir = "saved_media"
 if not os.path.exists(save_dir):
@@ -55,10 +55,10 @@ async def deleted_message_handler(event):
         if msg_id in message_cache:
             # Достаем удаленный текст из нашей памяти
             deleted_content = message_cache.pop(msg_id)
-            chat_id = event.chat_id or event.peer_id
+            chat_id = getattr(event, 'chat_id', None) or getattr(event, 'sender_id', None)
             
             # Отправляем в "Избранное" (Saved Messages)
-            await client.send_message('me', f"🗑️ **УДАЛЕНО В ЧАТЕ** ({chat_id}):\n\n{deleted_content}")
+            await client.send_message('me', f"🗑️ **УДАЛЕНО В ЧАТЕ** ({chat_id}):\n{deleted_content}")
         else:
             # Если сообщение было отправлено до запуска скрипта, мы его не знаем
             pass
